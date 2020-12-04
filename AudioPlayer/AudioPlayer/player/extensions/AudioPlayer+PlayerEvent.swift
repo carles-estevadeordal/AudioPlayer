@@ -20,7 +20,7 @@ extension AudioPlayer {
             if let error = error {
                 state = .failed(.foundationError(error))
             } else {
-                nextOrStop()
+                nextOrFinish()
             }
 
         case .interruptionBegan where state.isPlaying || state.isBuffering:

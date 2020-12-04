@@ -10,6 +10,8 @@ Pod::Spec.new do |s|
   s.source_files  = 'AudioPlayer/AudioPlayer/**/*.swift'
   s.requires_arc  = true
 
+  s.swift_version = '5.0'
+
   s.ios.deployment_target = '8.0'
   s.ios.framework = 'UIKit', 'AVFoundation', 'MediaPlayer', 'SystemConfiguration'
 

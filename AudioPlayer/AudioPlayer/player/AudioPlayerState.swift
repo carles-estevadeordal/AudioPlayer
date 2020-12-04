@@ -34,6 +34,7 @@ public enum AudioPlayerState {
     case playing
     case paused
     case stopped
+    case finished
     case waitingForConnection
     case failed(AudioPlayerError)
 
@@ -56,6 +57,14 @@ public enum AudioPlayerState {
     /// A boolean value indicating is self = `paused`.
     var isPaused: Bool {
         if case .paused = self {
+            return true
+        }
+        return false
+    }
+    
+    /// A boolean value indicating is self = `stopped`.
+    var isFinished: Bool {
+        if case .finished = self {
             return true
         }
         return false

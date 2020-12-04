@@ -36,3 +36,5 @@ Carthage/Build
 sonar*
 .sonar
 
+
+.DS_Store

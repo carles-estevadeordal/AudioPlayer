@@ -92,6 +92,8 @@ class PlayerEventProducer: NSObject, EventProducer {
     /// The time observer for the player.
     private var timeObserver: Any?
 
+    // Boundary Time Observer
+    private var boundaryTimeObserver: Any?
     /// A boolean value indicating whether we're currently listening to events on the player.
     private var listening = false
 
@@ -137,11 +139,19 @@ class PlayerEventProducer: NSObject, EventProducer {
         }
 
         //Observing timing event
-        timeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMake(value: 1, timescale: 2), queue: .main) { [weak self] time in
+        timeObserver = player.addPeriodicTimeObserver(forInterval: CMTime(seconds: 0.1,  preferredTimescale: CMTimeScale(NSEC_PER_SEC)), queue: .main) { [weak self] time in
             if let `self` = self {
                 self.eventListener?.onEvent(PlayerEvent.progressed(time: time), generetedBy: self)
             }
         }
+
+        //Observing timing event
+        let range: [NSValue] =  Array(0...1000).flatMap( { NSValue(time: CMTime(seconds: Double($0)/10.0, preferredTimescale: CMTimeScale(NSEC_PER_SEC))) } )
+        boundaryTimeObserver = player.addBoundaryTimeObserver(forTimes: range, queue: .main, using: { [weak self] in
+            if let `self` = self {
+                self.eventListener?.onEvent(PlayerEvent.progressed(time: player.currentTime()), generetedBy: self)
+            }
+        })
 
         listening = true
     }

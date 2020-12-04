@@ -77,6 +77,23 @@ extension AudioPlayer {
             stop()
         }
     }
+    
+    /// Plays the next item in the queue and if there isn't, the player will stop.
+    public func nextOrFinish() {
+        if let nextItem = queue?.nextItem() {
+            currentItem = nextItem
+        } else {
+            if let queue = queue, queue.items.count > 1 {
+                currentItem = queue.items[0]
+            }
+            
+            player?.rate = 0
+            self.seek(to: 0.0)
+            state = .finished
+            
+            retryEventProducer.stopProducingEvents()
+        }
+    }
 
     /// Stops the player and clear the queue.
     public func stop() {
